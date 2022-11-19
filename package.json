@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd backend && npm install && node server.js",
+    "start": "cd backend && node server.js",
     "frontend": "cd frontend && npm start",
-    "heroku-postbuild": "cd frontend && npm install && npm run build"
+    "heroku-postbuild": "cd frontend && npm install && npm run build && cd backend && npm install" 
   },
   "author": "Sangamesh",
   "license": "ISC",
@@ -23,5 +23,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "engines": {
+    "node": "14.x"
   }
+
 }
