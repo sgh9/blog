@@ -4,7 +4,7 @@ const userSchema =  mongoose.Schema({
     name : {
         type: String,
         required: true,
-        minLength: 5
+        minLength: 2
     },
     email: {
         type: String,
@@ -38,7 +38,7 @@ const userSchema =  mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: [ "USER", "AUTHOR", "MODERATE", "ADMIN"],
+        enum: [ "USER", "AUTHOR", "MODERATOR", "ADMIN"],
         default: "USER"
     }
     
@@ -46,6 +46,6 @@ const userSchema =  mongoose.Schema({
     timestamps: true 
 });
 
-const User = mongoose.model("users", userSchema);
+const User = mongoose.model("user", userSchema);
 
 export default User;
