@@ -2,7 +2,7 @@ const url = process.env.SERVER_URL || 'http://localhost:8080';
 
 class Ajax {
 
-    async get(path="", reqBody= {}, headers= {}, paramsObj= {}) {
+    async get(path="", headers= {}, paramsObj= {}) {
         let paramsLen = Object.keys(paramsObj).length;
         let params = '';
 
@@ -15,17 +15,27 @@ class Ajax {
                 if(i !== 0 ) params += "&";
             }
         }
-        const response = await fetch(url + path + params);
-        const data = await response.json();
+        const response = await fetch(url + path + params, {
+            method: "GET", 
+            headers: {
+                // "Content-Type": "application/json",
+                ...headers
+            },
+        });
+
+
         
         if (response.status === 400) {
-            throw new Error(response.message)
+            localStorage.removeItem('token');
+            window.location.reload();
+           // throw new Error(response.message)
         }
 
         if (response.status === 401) {
-            throw new Error(response.message)
+            throw new Error(response.message);
         }
-
+        
+        const data = await response.json();
         if (response.status === 200) {
             return data;
         }

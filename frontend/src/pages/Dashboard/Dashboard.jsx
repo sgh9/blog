@@ -1,11 +1,25 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { userContext } from '../../context/user/user.context.provider'; 
 import { useParams, useNavigate } from 'react-router-dom';
+import { ajax } from '../../services/ajax';
 
 const Dashboard = () => {
     let navigate = useNavigate();
     
-    const { authLogout, getAuthStatus, authState } = useContext(userContext);
+    const { authLogout, getAuthStatus, authState, loading } = useContext(userContext);
+    const [articles, setArticles] = useState([]);
+
+    useEffect(()=> {
+       if(authState.user.token) {
+           ajax.get('/articles/user',{
+               "X-Auth-token": authState.user.token
+           }).then((res)=> {
+               setArticles(res)
+           }).catch((err)=> {
+   
+           });
+       }
+    },[authState.user]);
     return (
         <>
             <button onClick={() => {
@@ -18,7 +32,7 @@ const Dashboard = () => {
             </button>
 
             <div>
-                Dashboard
+            {articles && articles.map(article=> <div>{article.title}</div>)}
             </div>
         </>
     )

@@ -24,7 +24,6 @@ const Login = () => {
                 localStorage.setItem('token', JSON.stringify(response.token));
                 authSuccess(response.token);
                 navigate('/dashboard');
-                window.location.reload();
             }
         }).catch((error)=> {
             setError(error.message);

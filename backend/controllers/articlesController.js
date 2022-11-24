@@ -11,6 +11,18 @@ export const getArticles = async(req, res)=> {
 
 }
 
+export const getUserArticles = async(req, res)=> {
+    try {
+        const articles = await Article.find({ userId: req.user._id});
+        res.status(200).send(articles);
+        
+    } catch (error) {
+        console.error(error);
+        res.status(401).send(error.message);
+    }
+
+}
+
 export const postArticle = async(req, res)=> {
     const article = new Article(req.body);
     article.userId = req.user._id;
