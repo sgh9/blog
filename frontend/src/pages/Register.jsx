@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate, Link} from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
-import { userContext } from '../context/user/user.context.provider';
+import { userContext, useUser } from '../context/user/UserContextProvider';
 import { ajax } from '../services/ajax';
 
 const defaultUser = {
@@ -18,8 +18,8 @@ const Register = () => {
     const [Error, setError] = useState('');
 
     let navigate = useNavigate();
-    const { authError, authRequest, authSuccess, authState } = useContext(userContext);
-    const { user: { auth } } = authState;
+    const { authError, authRequest, authSuccess, user:userDetails } = useUser();
+    const { auth } = userDetails ;
 
     const handleChange = (name, value)=> {
         setUser(prevUser => ({ ...prevUser, [name]: value}))

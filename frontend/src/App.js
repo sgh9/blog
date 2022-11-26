@@ -13,7 +13,7 @@ import {
 	Navigate,
 } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
-import UserContextProvider from './context/user/user.context.provider';
+import UserContextProvider from './context/user/UserContextProvider';
 import Register from './pages/Register';
 
 

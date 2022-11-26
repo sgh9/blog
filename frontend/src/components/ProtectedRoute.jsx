@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
-import { userContext } from '../context/user/user.context.provider';
+import { userContext, useUser } from '../context/user/UserContextProvider';
 
 const ProtectedRoute = () => {
-    const { authState, getAuthStatus } = useContext(userContext);
-    const { user : { auth, details, token }, loading } = authState;
+    const { user } = useUser();
+    const {  auth, token , loading } = user;
 
 	if(loading) {
 		return <div>Loading...</div>;

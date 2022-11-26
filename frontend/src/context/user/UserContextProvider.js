@@ -1,55 +1,51 @@
-import { createContext , useReducer, useRef, useEffect } from 'react';
+import { createContext , useReducer, useRef, useEffect, useContext } from 'react';
 import userReducer from './user.reducer';
-import useAuth from '../../hooks/useAuth';
+import { parseJwt } from '../../helpers/utils';
 
 const initialState = {
-    user: {
-        details: {},
-        auth: false,
-        token: '',
-    },
+    name: '',
+    email: '',
+    auth: false,
+    token: '',
     loading: true,
 }
 export const userContext = createContext(initialState);
 
 const UserContextProvider = ({ children })=> {
-    const { token, userDetails } = useAuth();
-    const [authState, dispatch] = useReducer(userReducer, initialState);
+    const token = JSON.parse(localStorage.getItem('token'));
+    const [user, dispatch] = useReducer(userReducer, initialState);
 
 	useEffect(() => {
 		getAuthStatus();
 	}, []);
 
-    const getAuthStatus = ()=> {
-        console.log('Auth status');
-        authRequest();
+    const getUserDetails = (jwt)=>  parseJwt(jwt);
 
+    const getAuthStatus = ()=> {
+        authRequest();
         if(!token){
             authLogout();
             console.log('Auth logout');
         } else {
-            authSuccess(token, userDetails);
+            authSuccess(token);
             console.log('Auth success');
         }
     }
 
     const authLogout = ()=> {
-
+        localStorage.removeItem('token');
         dispatch({
             type: "AUTH_LOGOUT",
             payload: {
-                user: {
-                    details: {},
-                    auth: false,
-                    token: '',
-                },
+                ...initialState,
+                auth: false,
+                token: '',
                 loading: false,
             }
         })
     }
 
     const authRequest = ()=> {
-        console.log('Auth request')
         dispatch({
             type: "AUTH_REQUEST",
             payload: {
@@ -57,16 +53,16 @@ const UserContextProvider = ({ children })=> {
             }
         })
     }
-    const authSuccess = (token, userDetails )=> {
+    const authSuccess = (token )=> {
+        localStorage.setItem('token', JSON.stringify(token));
+
         dispatch({
             type: "AUTH_SUCCESS",
             payload: {
-                user: {
-                    details: userDetails,
-                    auth: true,
-                    token: token,
-                },
-                loading: false
+                ...getUserDetails(token),
+                auth: true,
+                token: token,
+                loading: false   
             }
         })
     }
@@ -84,7 +80,7 @@ const UserContextProvider = ({ children })=> {
     return (
         <userContext.Provider 
             value={{
-                authState, 
+                user, 
                 authSuccess,
                 authError, 
                 authRequest, 
@@ -95,5 +91,7 @@ const UserContextProvider = ({ children })=> {
         </userContext.Provider>
     );
 }
+
+export const useUser = ()=> useContext(userContext);
 
 export default UserContextProvider;

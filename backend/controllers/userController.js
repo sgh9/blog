@@ -49,6 +49,7 @@ export const registerUser = async(req, res) => {
 }
 
 export const userLogin = async (req, res) => {
+
     try {
         const user = await User.findOne({ email: req.body.email});
         if(!user) {
@@ -59,10 +60,10 @@ export const userLogin = async (req, res) => {
         if(!validPassword) {
             return res.status(400).send("invalid password");
         }
-        const token = jwt.sign({ _id: user._id, name: user.name, userType: user.userType}, process.env.JWT_SECRET);
+        const token = jwt.sign({ _id: user._id, name: user.name, email: user.email, userType: user.userType}, process.env.JWT_SECRET);
         res.send({token: token});
     } catch (error) {
-        console.log("error", e.message);
-        res.status(400).send(e.message);
+        console.log("error", error.message);
+        res.status(400).send(error.message);
     }
 }

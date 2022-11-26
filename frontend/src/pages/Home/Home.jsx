@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { userContext } from '../../context/user/user.context.provider'; 
+import { userContext } from '../../context/user/UserContextProvider'; 
 import useAuth from '../../hooks/useAuth';
 import { ajax } from '../../services/ajax';
 

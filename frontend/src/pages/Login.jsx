@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ajax } from '../services/ajax';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { userContext } from '../context/user/user.context.provider'; 
+import { userContext, useUser } from '../context/user/UserContextProvider'; 
 import {  Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
@@ -11,8 +11,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [Error, setError] = useState('');
     let navigate = useNavigate();
-    const { authError, authRequest, authSuccess, authState } = useContext(userContext);
-    const { user : { auth } } = authState;
+    const { authError, authRequest, authSuccess, user } = useUser();
+    const { auth } = user;
 
 
     const handleLogin = async(e)=> {
@@ -21,7 +21,6 @@ const Login = () => {
         authRequest();
         ajax.post('/users/login', user).then((response)=> {
             if(response.token) {
-                localStorage.setItem('token', JSON.stringify(response.token));
                 authSuccess(response.token);
                 navigate('/dashboard');
             }
